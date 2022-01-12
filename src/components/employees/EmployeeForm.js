@@ -34,7 +34,7 @@ export const EmployeeForm = () => {
             <h2 className="employeeForm__title">New Employee</h2>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="Name">Name:</label>
+                    <label htmlFor="name">Name:</label>
                     <input
                         required autoFocus
                         type="text"
@@ -50,7 +50,7 @@ export const EmployeeForm = () => {
             </fieldset>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="Specialty">Specialty:</label>
+                    <label htmlFor="specialty">Specialty:</label>
                     <input
                         required
                         type="text"
