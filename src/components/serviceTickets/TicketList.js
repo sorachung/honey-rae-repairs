@@ -31,6 +31,7 @@ export const TicketList = () => {
                 <button onClick={() => history.push("/tickets/create")}>Create Ticket</button>
             </div>
             <div className="tickets__list">
+                <p>There are {tickets.length} open tickets</p>
                 {tickets.map(ticket => {
                     return <p key={`ticket--${ticket.id}`} className={`ticket--${ticket.id} ${ticket.emergency ? `emergency` : ``}`}>
                             {ticket.emergency ? "🚑" : ""} <Link to={`/tickets/${ticket.id}`}>{ticket.description}</Link> submitted by {ticket.customer.name} and worked on by {ticket.employee.name}
