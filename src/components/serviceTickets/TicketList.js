@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
+import { deleteTicket, getAllTickets } from "../ApiManager";
 import "./Tickets.css";
 
 export const TicketList = () => {
     const [tickets, updateTickets] = useState([])
     const history = useHistory();
 
-    const getEmployees = () => {
-        return fetch("http://localhost:8088/serviceTickets?_expand=employee&_expand=customer")
-                .then(res => res.json())
+    const getTickets = () => {
+        return getAllTickets()
                 .then((data) => {
                     updateTickets(data)
                 })
     }
 
     useEffect(
-        () => {getEmployees()},[]
+        () => {getTickets()},[]
     )
 
-    const deleteTicket = (id) => {
-        fetch(`http://localhost:8088/serviceTickets/${id}`, {
-            method: "DELETE"
-        }).then( () => getEmployees())
+    const removeTicket = (id) => {
+        return deleteTicket(id).then( () => getTickets())
     }
 
     return (
@@ -35,7 +33,7 @@ export const TicketList = () => {
                 {tickets.map(ticket => {
                     return <p key={`ticket--${ticket.id}`} className={`ticket--${ticket.id} ${ticket.emergency ? `emergency` : ``}`}>
                             {ticket.emergency ? "🚑" : ""} <Link to={`/tickets/${ticket.id}`}>{ticket.description}</Link> submitted by {ticket.customer.name} and worked on by {ticket.employee.name}
-                            <button onClick={() => {deleteTicket(ticket.id)}}>Delete</button>
+                            <button onClick={() => {removeTicket(ticket.id)}}>Delete</button>
                         </p>
                     })
                 }

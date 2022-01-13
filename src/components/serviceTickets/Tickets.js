@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { getAllEmployees, getSpecificTicket, putSpecificTicket } from "../ApiManager";
 
 export const Ticket = () => {
     const [ticket, setTicket] = useState({});
@@ -10,8 +11,7 @@ export const Ticket = () => {
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/serviceTickets/${ticketId}?_expand=customer&_expand=employee`)
-                .then(res => res.json())
+            getSpecificTicket(ticketId)
                 .then(data => setTicket(data));
         },
         [ticketId]
@@ -19,8 +19,7 @@ export const Ticket = () => {
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/employees`)
-                .then(res => res.json())
+            getAllEmployees()
                 .then((data) => syncEmployees(data));
         }, 
         []
@@ -29,7 +28,7 @@ export const Ticket = () => {
     // Function to invoke when an employee is chosen from <select> element
     const assignEmployee = (event) => {
         // Construct a new object to replace the existing one in the API
-        const updateTicket = {
+        const updatedTicket = {
             customerId: ticket.customerId,
             employeeId: parseInt(event.target.value),
             description: ticket.description,
@@ -38,13 +37,7 @@ export const Ticket = () => {
         }
 
         // Perform the PUT HTTP request to replace the resource
-        fetch(`http://localhost:8088/serviceTickets/${ticketId}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(updateTicket)
-        }).then( () => history.push("/tickets"))
+        putSpecificTicket(ticketId, updatedTicket).then( () => history.push("/tickets"))
     }
 
     return (
